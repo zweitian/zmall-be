@@ -77,7 +77,11 @@ public class UserController {
     }
 
     /**
+<<<<<<< HEAD
      * 获取用户提示问题接口
+=======
+     * 重置密码-获取用户提示问题接口
+>>>>>>> dev
      */
     @RequestMapping(value = "/user/{username}/question",method = RequestMethod.GET)
     @ResponseBody
@@ -86,7 +90,7 @@ public class UserController {
     }
 
     /**
-     * 根据用户名,提示问题,答案获取新增forget-token接口,返回的forget-token用于用户密码重置
+     * 重置密码-根据用户名,提示问题,答案获取新增forget-token接口,返回的forget-token用于用户密码重置
      */
     @RequestMapping(value = "/user/password/forget-token",method = RequestMethod.POST)
     @ResponseBody
@@ -95,7 +99,7 @@ public class UserController {
     }
 
     /**
-     * 根据用户名和forget-token重置密码的接口
+     * 重置密码-根据用户名和forget-token重置密码的接口
      */
     @RequestMapping(value = "/user/password/forget-token",method = RequestMethod.PUT)
     @ResponseBody
