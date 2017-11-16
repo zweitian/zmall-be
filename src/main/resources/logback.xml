@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true" scanPeriod="60 seconds" debug="false">
     <!-- 设置存放日志文件路径的变量 -->
-    <property name="log.path" value="D:/logs" />
+    <property name="log.path" value="/product/logs" />
     <!-- 信息输出到控制台的附加器  -->
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
