@@ -77,11 +77,7 @@ public class UserController {
     }
 
     /**
-<<<<<<< HEAD
-     * 获取用户提示问题接口
-=======
      * 重置密码-获取用户提示问题接口
->>>>>>> dev
      */
     @RequestMapping(value = "/user/{username}/question",method = RequestMethod.GET)
     @ResponseBody
