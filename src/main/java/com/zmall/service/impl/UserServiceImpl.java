@@ -199,6 +199,7 @@ public class UserServiceImpl implements IUserService{
         if(user==null){
             return ServerResponse.createByErrorMessage("获取用户信息失败,请稍后再试");
         }
+        user.setPassword(StringUtils.EMPTY);
         return ServerResponse.createBySuccess(user);
     }
 
