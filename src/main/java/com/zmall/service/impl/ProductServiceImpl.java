@@ -38,6 +38,7 @@ public class ProductServiceImpl implements IProductService{
     @Autowired
     private ICategoryService iCategoryService;
 
+    @Override
     public ServerResponse<String> saveOrUpdateProduct(Product product){
         if(product != null)
         {
@@ -67,7 +68,8 @@ public class ProductServiceImpl implements IProductService{
         return ServerResponse.createByErrorMessage("新增或更新产品参数不正确");
     }
 
-    public ServerResponse<String> setSaleStatus(Integer productId,Integer status){
+    @Override
+    public ServerResponse<String> setSaleStatus(Integer productId, Integer status){
         if(productId == null || status == null){
             return ServerResponse.createByBlankArguement();
         }
@@ -85,6 +87,7 @@ public class ProductServiceImpl implements IProductService{
         return ServerResponse.createBySuccess("修改产品销售状态成功");
     }
 
+    @Override
     public ServerResponse<ProductDetailVo> manageProductDetail(Integer productId){
         if(productId == null){
             return ServerResponse.createByBlankArguement();
@@ -118,6 +121,7 @@ public class ProductServiceImpl implements IProductService{
         return productDetailVo;
     }
     //获取Product List,并使用PageHelper进行分页
+    @Override
     public ServerResponse<PageInfo> getProductList(int pageNum, int pageSize){
         //startPage--start
         //填充自己的sql查询逻辑
@@ -142,7 +146,8 @@ public class ProductServiceImpl implements IProductService{
         return productListVo;
     }
 
-    public ServerResponse<PageInfo> searchProduct(String productName,Integer productId,int pageNum,int pageSize){
+    @Override
+    public ServerResponse<PageInfo> searchProduct(String productName, Integer productId, int pageNum, int pageSize){
         PageHelper.startPage(pageNum,pageSize);
         //拼接搜索字符串为模糊查询
         if(StringUtils.isNotBlank(productName)){
@@ -159,6 +164,7 @@ public class ProductServiceImpl implements IProductService{
         return ServerResponse.createBySuccess(pageResult);
     }
 
+    @Override
     public ServerResponse<ProductDetailVo> portalProductDetail(Integer productId){
         if(productId == null){
             return ServerResponse.createByBlankArguement();
@@ -175,7 +181,8 @@ public class ProductServiceImpl implements IProductService{
         return ServerResponse.createBySuccess(productDetailVo);
     }
 
-    public ServerResponse<PageInfo> getProductByKeywordCategory(String keyword,Integer categoryId,int pageNum,int pageSize,String orderBy){
+    @Override
+    public ServerResponse<PageInfo> getProductByKeywordCategory(String keyword, Integer categoryId, int pageNum, int pageSize, String orderBy){
         //判断搜索的品类id与搜索关键字是否为空
         if(StringUtils.isBlank(keyword) && categoryId == null){
             return ServerResponse.createByBlankArguement();

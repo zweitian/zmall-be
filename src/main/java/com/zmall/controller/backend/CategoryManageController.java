@@ -29,22 +29,37 @@ public class CategoryManageController {
     private ICategoryService iCategoryservice;
 
     /**
-     * 后台添加商品品类接口
+     * 后台根据categoryId获取下一级商品品类接口接口
      */
-    @RequestMapping(value = "/backend/category",method = RequestMethod.POST)
+    @RequestMapping(value = "/backend/category/parallel-children", method = RequestMethod.GET)
     @ResponseBody
-    public ServerResponse<String> addCatergory(HttpSession session, String categoryName, @RequestParam(value ="parentId",defaultValue = "0") int parentId)
-    {
+    public ServerResponse<List<Category>> getParallelChildrenCategory(HttpSession session, @RequestParam(value = "categoryId", defaultValue = "0") int categoryId) {
         //判断用户是否已登录
-        User user= (User) session.getAttribute(Const.CURRENT_USER);
-        if(user==null)
-        {
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        if (user == null) {
             return ServerResponse.createByNeedLogin();
         }
         //判断用户是否为管理员
-        if(iUserService.checkAdminRole(user).isSuccess())
-        {
-            return iCategoryservice.addCategory(categoryName,parentId);
+        if (iUserService.checkAdminRole(user).isSuccess()) {
+            return iCategoryservice.getParallelChildrenCategory(categoryId);
+        }
+        return ServerResponse.createByErrorMessage("用户非管理员,无权限进行品类更新操作");
+    }
+
+    /**
+     * 后台添加商品品类接口
+     */
+    @RequestMapping(value = "/backend/category", method = RequestMethod.POST)
+    @ResponseBody
+    public ServerResponse<String> addCatergory(HttpSession session, String categoryName, @RequestParam(value = "parentId", defaultValue = "0") int parentId) {
+        //判断用户是否已登录
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        if (user == null) {
+            return ServerResponse.createByNeedLogin();
+        }
+        //判断用户是否为管理员
+        if (iUserService.checkAdminRole(user).isSuccess()) {
+            return iCategoryservice.addCategory(categoryName, parentId);
         }
         return ServerResponse.createByErrorMessage("用户非管理员,无权限进行添加品类操作");
     }
@@ -52,59 +67,34 @@ public class CategoryManageController {
     /**
      * 后台更新商品品类名称接口
      */
-    @RequestMapping(value = "/backend/category/name",method = RequestMethod.PUT)
+    @RequestMapping(value = "/backend/category/name", method = RequestMethod.PUT)
     @ResponseBody
-    public ServerResponse<String> updateCategoryName(HttpSession session, String categoryName,int categoryId)
-    {
+    public ServerResponse<String> updateCategoryName(HttpSession session, String categoryName, int categoryId) {
         //判断用户是否已登录
-        User user= (User) session.getAttribute(Const.CURRENT_USER);
-        if(user==null)
-        {
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        if (user == null) {
             return ServerResponse.createByNeedLogin();
         }
         //判断用户是否为管理员
-        if(iUserService.checkAdminRole(user).isSuccess())
-        {
-            return iCategoryservice.updateCategoryName(categoryName,categoryId);
+        if (iUserService.checkAdminRole(user).isSuccess()) {
+            return iCategoryservice.updateCategoryName(categoryName, categoryId);
         }
         return ServerResponse.createByErrorMessage("用户非管理员,无权限进行品类更新操作");
     }
-    /**
-     * 后台根据categoryId获取下一级商品品类接口接口
-     */
-    @RequestMapping(value = "/backend/category/parallel-children",method = RequestMethod.GET)
-    @ResponseBody
-    public ServerResponse<List<Category>> getParallelChildrenCategory(HttpSession session, @RequestParam(value = "categoryId" ,defaultValue = "0") int categoryId)
-    {
-        //判断用户是否已登录
-        User user= (User) session.getAttribute(Const.CURRENT_USER);
-        if(user==null)
-        {
-            return ServerResponse.createByNeedLogin();
-        }
-        //判断用户是否为管理员
-        if(iUserService.checkAdminRole(user).isSuccess())
-        {
-            return iCategoryservice.getParallelChildrenCategory(categoryId);
-        }
-        return ServerResponse.createByErrorMessage("用户非管理员,无权限进行品类更新操作");
-    }
+
     /**
      * 后台根据categoryId获取商品品类和该商品品类的所有子孙品类的接口
      */
-    @RequestMapping(value = "/backend/category/all",method = RequestMethod.GET)
+    @RequestMapping(value = "/backend/category/all", method = RequestMethod.GET)
     @ResponseBody
-    public ServerResponse<List<Integer>> getCategoryAndChildren(HttpSession session, @RequestParam(value = "categoryId" ,defaultValue = "0") int categoryId)
-    {
-        //判断用户是否已登录
-        User user= (User) session.getAttribute(Const.CURRENT_USER);
-        if(user==null)
-        {
+    public ServerResponse<List<Integer>> getCategoryAndChildren(HttpSession session, @RequestParam(value = "categoryId", defaultValue = "0") int categoryId) {
+        // 判断用户是否已登录
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        if (user == null) {
             return ServerResponse.createByNeedLogin();
         }
-        //判断用户是否为管理员
-        if(iUserService.checkAdminRole(user).isSuccess())
-        {
+        // 判断用户是否为管理员
+        if (iUserService.checkAdminRole(user).isSuccess()) {
             return iCategoryservice.getCategoryAndChildrenById(categoryId);
         }
         return ServerResponse.createByErrorMessage("用户非管理员,无权限进行品类更新操作");

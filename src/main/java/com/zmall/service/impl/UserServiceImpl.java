@@ -40,6 +40,7 @@ public class UserServiceImpl implements IUserService{
         return ServerResponse.createBySuccess("登录成功",user);
     }
 
+    @Override
     public ServerResponse<String> register(User user) {
         //用户名校验
         ServerResponse<String> checkResult = this.checkValid(Const.CheckType.USERNAME, user.getUsername());
@@ -67,7 +68,8 @@ public class UserServiceImpl implements IUserService{
     }
 
     //用户信息字段校验接口,用户名或邮箱已存在时返回false
-    public ServerResponse<String> checkValid(String type,String str) {
+    @Override
+    public ServerResponse<String> checkValid(String type, String str) {
         //任一参数为空,返回非法参数错误
         if(StringUtils.isBlank(type)||StringUtils.isBlank(str)){
             return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(),
@@ -95,6 +97,7 @@ public class UserServiceImpl implements IUserService{
         return ServerResponse.createBySuccessMessage("校验成功");
     }
 
+    @Override
     public ServerResponse<String> selectQuestion(String username) {
         ServerResponse<String> checkResult = this.checkValid(Const.CheckType.USERNAME, username);
         //若校验成功,说明用户名不存在
@@ -110,7 +113,8 @@ public class UserServiceImpl implements IUserService{
         return ServerResponse.createBySuccess(question);
     }
 
-    public ServerResponse<String> getTokenByAnswer(String username,String question,String answer){
+    @Override
+    public ServerResponse<String> getTokenByAnswer(String username, String question, String answer){
         int result=userMapper.checkAnswer(username,question,answer);
         if (result>0){
             /*
@@ -125,7 +129,8 @@ public class UserServiceImpl implements IUserService{
         }
         return ServerResponse.createByErrorMessage("问题答案不正确");
     }
-    public ServerResponse<String> resetPassByToken(String username,String passwordNew,String forgetToken){
+    @Override
+    public ServerResponse<String> resetPassByToken(String username, String passwordNew, String forgetToken){
         //若参数为空
         if(StringUtils.isBlank(username)||StringUtils.isBlank(passwordNew)||StringUtils.isBlank(forgetToken)){
             return ServerResponse.createByBlankArguement();
@@ -148,7 +153,8 @@ public class UserServiceImpl implements IUserService{
             return ServerResponse.createByErrorMessage("token无效或已过期,请重新获取token");
         }
     }
-    public ServerResponse<String> resetPassInLogin(String passwordOld,String passwordNew,User user){
+    @Override
+    public ServerResponse<String> resetPassInLogin(String passwordOld, String passwordNew, User user){
         //若参数为空
         if(StringUtils.isBlank(passwordOld)||StringUtils.isBlank(passwordNew)){
             return ServerResponse.createByBlankArguement();
@@ -165,6 +171,7 @@ public class UserServiceImpl implements IUserService{
         }
         return ServerResponse.createBySuccessMessage("重置密码成功");
     }
+    @Override
     public ServerResponse<User> updateInformation(User user){
         //更新用户数据时,校验字段非空
         Integer userId = user.getId();
@@ -190,6 +197,7 @@ public class UserServiceImpl implements IUserService{
         }
         return ServerResponse.createBySuccess("更新个人信息成功",user);
     }
+    @Override
     public ServerResponse<User> getInfoByUserId(Integer userId){
         //若参数为空
         if(userId==null){
@@ -204,6 +212,7 @@ public class UserServiceImpl implements IUserService{
     }
 
     //backend 校验用户是否为管理员
+    @Override
     public ServerResponse<String> checkAdminRole(User user)
     {
         if(user.getRole().intValue()==Const.Role.ROLE_ADMIN)

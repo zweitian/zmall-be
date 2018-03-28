@@ -2,6 +2,7 @@ package com.zmall.pojo;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Product {
     private Integer id;

@@ -12,14 +12,14 @@ import java.util.*;
 public class Const {
 
     public static final String CURRENT_USER="currentUser";
-    /*
+    /**
         用户角色类型
     */
     public interface Role{
         int ROLE_CUSTOMER=0;
         int ROLE_ADMIN=1;
     }
-    /*
+    /**
         用户数据校验类型
     */
     public interface CheckType{
@@ -158,7 +158,7 @@ public class Const {
                     return paymentTypeEnum;
                 }
             }
-            throw new RuntimeException("么有找到对应的枚举");
+            throw new RuntimeException("没有找到对应的枚举");
         }
 
     }

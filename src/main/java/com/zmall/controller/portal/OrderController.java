@@ -45,7 +45,24 @@ public class OrderController {
     }
 
     /**
-     * 订单状态改变后支付宝进行回调的接口
+     * 订单状态查询的接口
+     */
+    @ResponseBody
+    @RequestMapping(value = "/orders/{orderNo}/status",method = RequestMethod.GET)
+    public ServerResponse<Boolean> queryOrderPayStatus(HttpSession session,@PathVariable("orderNo") Long orderNo){
+        User user = (User)session.getAttribute(Const.CURRENT_USER);
+        if(user ==null){
+            return ServerResponse.createByNeedLogin();
+        }
+        ServerResponse serverResponse = iOrderService.queryOrderPayStatus(user.getId(),orderNo);
+        if(serverResponse.isSuccess()){
+            return ServerResponse.createBySuccess(true);
+        }
+        return ServerResponse.createBySuccess(false);
+    }
+
+    /**
+     * 订单支付完成后支付宝进行回调的接口
      */
     @ResponseBody
     @RequestMapping(value = "/orders/payment/alipay_callback",method = RequestMethod.POST)
@@ -86,22 +103,7 @@ public class OrderController {
         }
         return Const.AlipayCallback.RESPONSE_FAILED;
     }
-    /**
-     * 订单状态查询的接口
-     */
-    @ResponseBody
-    @RequestMapping(value = "/orders/{orderNo}/status",method = RequestMethod.GET)
-    public ServerResponse<Boolean> queryOrderPayStatus(HttpSession session,@PathVariable("orderNo") Long orderNo){
-        User user = (User)session.getAttribute(Const.CURRENT_USER);
-        if(user ==null){
-            return ServerResponse.createByNeedLogin();
-        }
-        ServerResponse serverResponse = iOrderService.queryOrderPayStatus(user.getId(),orderNo);
-        if(serverResponse.isSuccess()){
-            return ServerResponse.createBySuccess(true);
-        }
-        return ServerResponse.createBySuccess(false);
-    }
+
 
     /**
      * 订单创建的接口
@@ -117,18 +119,6 @@ public class OrderController {
     }
 
     /**
-     * 订单取消的接口
-     */
-    @ResponseBody
-    @RequestMapping(value = "/orders/canel-server",method = RequestMethod.PUT)
-    public ServerResponse cancel(HttpSession session, Long orderNo){
-        User user = (User)session.getAttribute(Const.CURRENT_USER);
-        if(user ==null){
-            return ServerResponse.createByNeedLogin();
-        }
-        return iOrderService.cancel(user.getId(),orderNo);
-    }
-    /**
      * 订单确认页获取订单商品的接口
      */
     @ResponseBody
@@ -139,18 +129,6 @@ public class OrderController {
             return ServerResponse.createByNeedLogin();
         }
         return iOrderService.getOrderCartProduct(user.getId());
-    }
-    /**
-     * 获取订单详细信息的接口
-     */
-    @ResponseBody
-    @RequestMapping(value = "/orders/{orderNo}",method = RequestMethod.GET)
-    public ServerResponse detail(HttpSession session,@PathVariable("orderNo") Long orderNo){
-        User user = (User)session.getAttribute(Const.CURRENT_USER);
-        if(user ==null){
-            return ServerResponse.createByNeedLogin();
-        }
-        return iOrderService.getOrderDetail(user.getId(),orderNo);
     }
 
     /**
@@ -165,4 +143,31 @@ public class OrderController {
         }
         return iOrderService.getOrderList(user.getId(),pageNum,pageSize);
     }
+
+    /**
+     * 获取订单详细信息的接口
+     */
+    @ResponseBody
+    @RequestMapping(value = "/orders/{orderNo}",method = RequestMethod.GET)
+    public ServerResponse detail(HttpSession session,@PathVariable("orderNo") Long orderNo){
+        User user = (User)session.getAttribute(Const.CURRENT_USER);
+        if(user ==null){
+            return ServerResponse.createByNeedLogin();
+        }
+        return iOrderService.getOrderDetail(user.getId(),orderNo);
+    }
+
+    /**
+     * 订单取消的接口
+     */
+    @ResponseBody
+    @RequestMapping(value = "/orders/canel-server",method = RequestMethod.PUT)
+    public ServerResponse cancel(HttpSession session, Long orderNo){
+        User user = (User)session.getAttribute(Const.CURRENT_USER);
+        if(user ==null){
+            return ServerResponse.createByNeedLogin();
+        }
+        return iOrderService.cancel(user.getId(),orderNo);
+    }
+
 }

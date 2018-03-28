@@ -81,7 +81,8 @@ public class OrderServiceImpl implements IOrderService{
      * @param localUploadPath  tomcat upload文件夹路径
      * @return
      */
-    public ServerResponse pay(Long orderNo,Integer userId,String localUploadPath){
+    @Override
+    public ServerResponse pay(Long orderNo, Integer userId, String localUploadPath){
         Map<String ,String> resultMap = Maps.newHashMap();
         Order order = orderMapper.selectByUserIdAndOrderNo(userId,orderNo);
         if(order == null){
@@ -222,6 +223,7 @@ public class OrderServiceImpl implements IOrderService{
      * @param params
      * @return
      */
+    @Override
     public ServerResponse aliCallback(Map<String,String> params){
         Long orderNo = Long.parseLong(params.get("out_trade_no"));
         String tradeNo = params.get("trade_no");
@@ -257,7 +259,8 @@ public class OrderServiceImpl implements IOrderService{
      * @param orderNo
      * @return
      */
-    public ServerResponse queryOrderPayStatus(Integer userId,Long orderNo){
+    @Override
+    public ServerResponse queryOrderPayStatus(Integer userId, Long orderNo){
         Order order = orderMapper.selectByUserIdAndOrderNo(userId,orderNo);
         if(order == null){
             return ServerResponse.createByErrorMessage("用户没有该订单");
@@ -288,7 +291,8 @@ public class OrderServiceImpl implements IOrderService{
      * 订单创建服务
      */
     //// TODO: 2017/11/12 事务控制
-    public  ServerResponse createOrder(Integer userId,Integer shippingId) throws Exception{
+    @Override
+    public  ServerResponse createOrder(Integer userId, Integer shippingId) throws Exception{
 
         //从购物车中获取数据
         List<Cart> cartList = cartMapper.selectCheckedCartByUserId(userId);
@@ -325,7 +329,8 @@ public class OrderServiceImpl implements IOrderService{
         return ServerResponse.createBySuccess(orderVo);
     }
     //取消订单服务
-    public ServerResponse<String> cancel(Integer userId,Long orderNo){
+    @Override
+    public ServerResponse<String> cancel(Integer userId, Long orderNo){
         Order order  = orderMapper.selectByUserIdAndOrderNo(userId,orderNo);
         if(order == null){
             return ServerResponse.createByErrorMessage("该用户此订单不存在");
@@ -343,6 +348,7 @@ public class OrderServiceImpl implements IOrderService{
             return ServerResponse.createBySuccess();
     }
     //从购物车获取需要下单的商品的接口
+    @Override
     public ServerResponse getOrderCartProduct(Integer userId){
         OrderProductVo orderProductVo = new OrderProductVo();
         //从购物车中获取数据
@@ -367,7 +373,8 @@ public class OrderServiceImpl implements IOrderService{
         return ServerResponse.createBySuccess(orderProductVo);
     }
     //获取订单详细信息
-    public ServerResponse<OrderVo> getOrderDetail(Integer userId,Long orderNo){
+    @Override
+    public ServerResponse<OrderVo> getOrderDetail(Integer userId, Long orderNo){
         Order order = orderMapper.selectByUserIdAndOrderNo(userId,orderNo);
         if(order != null){
             List<OrderItem> orderItemList = orderItemMapper.getByOrderNoUserId(orderNo,userId);
@@ -377,6 +384,7 @@ public class OrderServiceImpl implements IOrderService{
         return  ServerResponse.createByErrorMessage("没有找到该订单");
     }
     //获取用户订单列表服务
+    @Override
     public ServerResponse<PageInfo> getOrderList(Integer userId, int pageNum, int pageSize){
         PageHelper.startPage(pageNum,pageSize);
         List<Order> orderList = orderMapper.selectByUserId(userId);
@@ -546,7 +554,8 @@ public class OrderServiceImpl implements IOrderService{
      * 订单后台服务
      */
     //后台管理员获取订单列表
-    public ServerResponse<PageInfo> manageList(int pageNum,int pageSize){
+    @Override
+    public ServerResponse<PageInfo> manageList(int pageNum, int pageSize){
         PageHelper.startPage(pageNum,pageSize);
         List<Order> orderList = orderMapper.selectAllOrder();
         //管理员不需传入userId
@@ -557,6 +566,7 @@ public class OrderServiceImpl implements IOrderService{
     }
 
     //后台管理员获取订单详细信息
+    @Override
     public ServerResponse<OrderVo> manageDetail(Long orderNo){
         Order order = orderMapper.selectByOrderNo(orderNo);
         if(order != null){
@@ -568,7 +578,8 @@ public class OrderServiceImpl implements IOrderService{
     }
 
     //后台管理员获取订单搜索服务
-    public ServerResponse<PageInfo> manageSearch(Long orderNo,int pageNum,int pageSize){
+    @Override
+    public ServerResponse<PageInfo> manageSearch(Long orderNo, int pageNum, int pageSize){
         PageHelper.startPage(pageNum,pageSize);
         Order order = orderMapper.selectByOrderNo(orderNo);
         if(order != null){
@@ -581,6 +592,7 @@ public class OrderServiceImpl implements IOrderService{
         return ServerResponse.createByErrorMessage("订单不存在");
     }
     //后台管理员对订单发货服务
+    @Override
     public ServerResponse<String> manageSendGoods(Long orderNo){
         Order order= orderMapper.selectByOrderNo(orderNo);
         if(order != null){

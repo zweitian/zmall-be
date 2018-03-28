@@ -17,14 +17,6 @@ import org.springframework.web.bind.annotation.*;
 public class ProductController {
     @Autowired
     private IProductService iProductService;
-    /**
-     * 门户获得商品详细信息的接口
-     */
-    @ResponseBody
-    @RequestMapping(value = "/products/{productId}",method = RequestMethod.GET)
-    public ServerResponse<ProductDetailVo> getProductDetail(@PathVariable("productId") Integer prductId){
-        return iProductService.portalProductDetail(prductId);
-    }
 
     /**
      * 门户获得商品搜索服务的接口
@@ -37,5 +29,14 @@ public class ProductController {
                                          @RequestParam(value = "pageSize",defaultValue = "10") int pageSize,
                                          @RequestParam(value = "orderBy",defaultValue = "") String orderBy){
         return iProductService.getProductByKeywordCategory(keyword,categoryId,pageNum,pageSize,orderBy);
+    }
+
+    /**
+     * 门户获得商品详细信息的接口
+     */
+    @ResponseBody
+    @RequestMapping(value = "/products/{productId}",method = RequestMethod.GET)
+    public ServerResponse<ProductDetailVo> getProductDetail(@PathVariable("productId") Integer prductId){
+        return iProductService.portalProductDetail(prductId);
     }
 }

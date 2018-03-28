@@ -9,14 +9,14 @@ import com.zmall.pojo.User;
  * @CreateTime: 2017/11/9  16:43
  */
 public interface IUserService {
-    public ServerResponse<User> login(String username,String password);
-    public ServerResponse<String> register(User user);
-    public ServerResponse<String> checkValid(String type,String str);
-    public ServerResponse<String> selectQuestion(String username) ;
-    public ServerResponse<String> getTokenByAnswer(String username,String question,String answer);
-    public ServerResponse<String> resetPassByToken(String username,String passwordNew,String forgetToken);
-    public ServerResponse<String> resetPassInLogin(String passwordOld,String passwordNew,User user);
-    public ServerResponse<User> updateInformation(User user);
-    public ServerResponse<User> getInfoByUserId(Integer userId);
-    public ServerResponse<String> checkAdminRole(User user);
+     ServerResponse<User> login(String username,String password);
+     ServerResponse<String> register(User user);
+     ServerResponse<String> checkValid(String type,String str);
+     ServerResponse<String> selectQuestion(String username) ;
+     ServerResponse<String> getTokenByAnswer(String username,String question,String answer);
+     ServerResponse<String> resetPassByToken(String username,String passwordNew,String forgetToken);
+     ServerResponse<String> resetPassInLogin(String passwordOld,String passwordNew,User user);
+     ServerResponse<User> updateInformation(User user);
+     ServerResponse<User> getInfoByUserId(Integer userId);
+     ServerResponse<String> checkAdminRole(User user);
 }

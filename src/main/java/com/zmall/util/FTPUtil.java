@@ -51,10 +51,11 @@ public class FTPUtil {
     private boolean uploadFileToFtp(String remotePath,List<File> fileList) throws IOException {
         boolean uploadResult = false;
         FileInputStream fis = null;
-        //连接FTP服务器
+        // 连接FTP服务器
         if(connectServer(this.ip,this.port,this.user,this.pwd)){
             try {
-                ftpClient.changeWorkingDirectory(remotePath);//切换上传文件目录
+                // 切换上传文件目录
+                ftpClient.changeWorkingDirectory(remotePath);
                 ftpClient.setBufferSize(1024);
                 ftpClient.setControlEncoding("UTF-8");
                 ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
@@ -69,7 +70,8 @@ public class FTPUtil {
                 }
                 uploadResult=true;
             } catch (IOException e) {
-                logger.error("上传文件过程发生异常",e);
+                // 日志保留现场信息与异常堆栈信息
+                logger.error("上传文件过程发生异常_"+e.getMessage(),e);
                 throw e;
             } finally {
                 if(fis!=null){

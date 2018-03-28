@@ -29,7 +29,8 @@ public class CategoryServiceImpl implements ICategoryService{
     //日志对象
     private Logger logger= LoggerFactory.getLogger(CategoryServiceImpl.class);
 
-    public ServerResponse<String> addCategory(String categoryName,Integer parentId)
+    @Override
+    public ServerResponse<String> addCategory(String categoryName, Integer parentId)
     {
         if(StringUtils.isBlank(categoryName)||parentId==null)
         {
@@ -49,7 +50,8 @@ public class CategoryServiceImpl implements ICategoryService{
             return ServerResponse.createBySuccess("商品品类添加成功");
     }
 
-    public ServerResponse<String> updateCategoryName(String categoryName,Integer categoryId)
+    @Override
+    public ServerResponse<String> updateCategoryName(String categoryName, Integer categoryId)
     {
         if(StringUtils.isBlank(categoryName)||categoryId==null)
         {
@@ -68,6 +70,7 @@ public class CategoryServiceImpl implements ICategoryService{
             return ServerResponse.createBySuccessMessage("商品品类更新成功");
     }
 
+    @Override
     public ServerResponse<List<Category>> getParallelChildrenCategory(Integer parentId)
     {
         List<Category> categoryList = categoryMapper.selectParallelCategoryByParentId(parentId);
@@ -78,6 +81,7 @@ public class CategoryServiceImpl implements ICategoryService{
         return ServerResponse.createBySuccess(categoryList);
     }
 
+    @Override
     public ServerResponse<List<Integer>> getCategoryAndChildrenById(Integer categoryId)
     {
         List<Integer> categoryList = Lists.newArrayList();

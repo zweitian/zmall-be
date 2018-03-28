@@ -58,6 +58,7 @@ public class ShippingController {
         }
         return iShippingService.update(user.getId(),shipping);
     }
+
     /**
      * 获取收货地址详情信息的接口
      */

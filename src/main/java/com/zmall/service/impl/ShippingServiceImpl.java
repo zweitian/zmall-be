@@ -23,6 +23,7 @@ public class ShippingServiceImpl implements IShippingService {
     @Autowired
     private ShippingMapper shippingMapper;
 
+    @Override
     public ServerResponse<Map> add(Integer userId, Shipping shipping){
         shipping.setUserId(userId);
         int rowCount = shippingMapper.insert(shipping);
@@ -34,13 +35,15 @@ public class ShippingServiceImpl implements IShippingService {
         return ServerResponse.createBySuccess("新建地址成功",result);
     }
 
-    public ServerResponse<String> del(Integer userId,Integer shippingId){
+    @Override
+    public ServerResponse<String> del(Integer userId, Integer shippingId){
         int resultCount = shippingMapper.deleteByShippingIdUserId(userId,shippingId);
         if(resultCount == 0){
             return ServerResponse.createByErrorMessage("删除地址失败");
         }
         return ServerResponse.createBySuccess("删除地址成功");
     }
+    @Override
     public ServerResponse update(Integer userId, Shipping shipping){
         shipping.setUserId(userId);
         int rowCount = shippingMapper.updateByShipping(shipping);
@@ -50,6 +53,7 @@ public class ShippingServiceImpl implements IShippingService {
         return ServerResponse.createBySuccess("更新地址成功");
     }
 
+    @Override
     public ServerResponse<Shipping> select(Integer userId, Integer shippingId){
         //根据shippingId与userId获取收货地址详细信息
         Shipping shipping = shippingMapper.selectByShippingIdUserId(userId,shippingId);
@@ -59,6 +63,7 @@ public class ShippingServiceImpl implements IShippingService {
         return ServerResponse.createBySuccess(shipping);
     }
 
+    @Override
     public ServerResponse<PageInfo> list(Integer userId, int pageNum, int pageSize){
         PageHelper.startPage(pageNum,pageSize);
         List<Shipping> shippingList = shippingMapper.selectByUserId(userId);

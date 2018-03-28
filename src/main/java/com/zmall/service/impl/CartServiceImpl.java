@@ -32,16 +32,17 @@ public class CartServiceImpl implements ICartService{
     private ProductMapper productMapper;
     @Autowired
     private CartMapper cartMapper;
-    //购物车添加商品
+    // 购物车添加商品
+    @Override
     public ServerResponse<CartVo> add(Integer userId, Integer productId, Integer count){
         if(productId == null || count == null){
             ServerResponse.createByBlankArguement();
         }
         //查询数据库是否有要添加的商品
-      /*  Product product = productMapper.selectByPrimaryKey(productId);
+        Product product = productMapper.selectByPrimaryKey(productId);
         if(product==null){
             return ServerResponse.createByErrorMessage("要添加的商品不存在");
-        }*/
+        }
         Cart cart = cartMapper.selectCartByUserIdProductId(userId,productId);
         if(cart == null){
             //这个产品不在这个购物车里,需要新增一个这个产品的记录
@@ -63,7 +64,8 @@ public class CartServiceImpl implements ICartService{
         return this.getResponseWithCartVo(userId);
     }
     //购物车更新商品
-    public ServerResponse<CartVo> update(Integer userId,Integer productId,Integer count){
+    @Override
+    public ServerResponse<CartVo> update(Integer userId, Integer productId, Integer count){
         if(productId == null || count == null){
             ServerResponse.createByBlankArguement();
         }
@@ -76,7 +78,8 @@ public class CartServiceImpl implements ICartService{
         return this.getResponseWithCartVo(userId);
     }
     //购物车删除商品
-    public ServerResponse<CartVo> deleteProduct(Integer userId,String productIds){
+    @Override
+    public ServerResponse<CartVo> deleteProduct(Integer userId, String productIds){
         if(userId==null||productIds==null){
             return ServerResponse.createByBlankArguement();
         }
@@ -89,15 +92,18 @@ public class CartServiceImpl implements ICartService{
     }
 
     //获取购物车中的商品
+    @Override
     public ServerResponse<CartVo> list (Integer userId){
         return this.getResponseWithCartVo(userId);
     }
     //购物车商品选择状态改变,productId为null时会根据参数进行全选或全不选
-    public ServerResponse<CartVo> selectOrUnSelect (Integer userId,Integer productId,Integer checked){
+    @Override
+    public ServerResponse<CartVo> selectOrUnSelect (Integer userId, Integer productId, Integer checked){
         cartMapper.checkedOrUncheckedProduct(userId,productId,checked);
         return this.list(userId);
     }
 
+    @Override
     public ServerResponse<Integer> getCartProductCount(Integer userId){
         if(userId == null){
             return ServerResponse.createBySuccess(0);
