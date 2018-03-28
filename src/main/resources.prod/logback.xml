@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+    <!-- 设置存放日志文件路径的变量 -->
+    <property name="log.path" value="/product/logs" />
+    <!-- 信息输出到控制台的附加器  -->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>[%d{HH:mm:ss.SSS}][%p][%c{40}][%t] %m%n</pattern>
+        </encoder>
+    </appender>
+    <!-- 信息输出到每日文件的附加器   class指定附加器的类型-->
+    <appender name="zmall" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${log.path}/zmall.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>10</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>[%d{HH:mm:ss.SSS}][%p][%c{40}][%t] %m%n</pattern>
+        </encoder>
+    </appender>
+    <!-- error信息输出到每日文件的附加器    class指定附加器的类型-->
+    <appender name="error" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${log.path}/error.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!--<fileNamePattern>d:/zmalllog/error.log.%d{yyyy-MM-dd}.gz</fileNamePattern>-->
+            <maxHistory>10</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>[%d{HH:mm:ss.SSS}][%p][%c{40}][%t] %m%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+    <!-- 捕获到com.log包的INFO级别信息后，使用哪些附加器进行信息输出
+         additivity="false"表示捕获到的信息不递交给祖父logger
+        <logger name="com.log" level="INFO">
+            <appender-ref ref="zmall" />
+            <appender-ref ref="error" />
+        </logger>
+    -->
+    <!-- 捕获到项目中大于等于Debug级别信息后，使用哪些附加器进行信息输出 -->
+    <root level="DEBUG">
+        <appender-ref ref="console"/>
+        <appender-ref ref="zmall"/>
+        <appender-ref ref="error"/>
+    </root>
+</configuration>
