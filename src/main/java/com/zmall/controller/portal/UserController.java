@@ -4,6 +4,9 @@ import com.zmall.common.Const;
 import com.zmall.common.ServerResponse;
 import com.zmall.pojo.User;
 import com.zmall.service.IUserService;
+import com.zmall.util.CookieUtil;
+import com.zmall.util.JsonUtil;
+import com.zmall.util.RedisPoolUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -28,11 +32,15 @@ public class UserController {
      */
     @RequestMapping(value = "/session/user", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<User> login(String username, String password, HttpSession session) {
+    public ServerResponse<User> login(String username, String password, HttpSession session, HttpServletResponse httpResponse) {
         ServerResponse<User> response = iUserService.login(username, password);
-        //登录成功,存放用户信息到session域
+        // 登录成功,存放用户信息到session域
         if (response.isSuccess()) {
-            session.setAttribute(Const.CURRENT_USER, response.getData());
+            // session.setAttribute(Const.CURRENT_USER, response.getData());
+            String sessionId = session.getId();
+            String userJson = JsonUtil.objToString(response.getData());
+            RedisPoolUtil.setEx(sessionId, userJson, Const.RedisCacheExtime.REDIS_SESSION_EXTIME);
+            CookieUtil.writeLoginToken(httpResponse, session.getId());
         }
         return response;
     }
