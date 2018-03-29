@@ -104,8 +104,6 @@ public class RedisPoolUtil {
         Jedis jedis = null;
         Long result = null;
         try {
-            jedis = RedisPool.getJedis();
-            jedis.
             result = jedis.del(key);
         } catch (Exception e) {
             log.error("del key:{} error", key, e);
