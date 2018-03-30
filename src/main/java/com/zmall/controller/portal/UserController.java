@@ -7,6 +7,7 @@ import com.zmall.service.IUserService;
 import com.zmall.util.CookieUtil;
 import com.zmall.util.JsonUtil;
 import com.zmall.util.RedisPoolUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -40,7 +42,7 @@ public class UserController {
             String sessionId = session.getId();
             String userJson = JsonUtil.objToString(response.getData());
             RedisPoolUtil.setEx(sessionId, userJson, Const.RedisCacheExtime.REDIS_SESSION_EXTIME);
-            CookieUtil.writeLoginToken(httpResponse, session.getId());
+            CookieUtil.writeLoginToken(httpResponse, sessionId);
         }
         return response;
     }
@@ -68,8 +70,11 @@ public class UserController {
      */
     @RequestMapping(value = "/session/user", method = RequestMethod.GET)
     @ResponseBody
-    public ServerResponse<User> getUserInfoFromSession(HttpSession session) {
-        User user = (User) session.getAttribute(Const.CURRENT_USER);
+    public ServerResponse<User> getUserInfoFromSession(HttpServletRequest request) {
+        //User user = (User) session.getAttribute(Const.CURRENT_USER);
+        String sessionId = CookieUtil.readLoginToken(request);
+        String userJsonStr = RedisPoolUtil.get(sessionId);
+        User user = JsonUtil.stringToObj(userJsonStr, User.class);
         if (user == null) {
             return ServerResponse.createByErrorMessage("用户未登录,获取用户信息失败");
         }

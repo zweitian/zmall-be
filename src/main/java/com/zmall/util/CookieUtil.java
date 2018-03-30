@@ -13,11 +13,11 @@ import javax.servlet.http.HttpServletResponse;
 @Slf4j
 public class CookieUtil {
 
-    private final static String COOKIE_DOMAIN = ".zwtzmall.cn/";
+    private final static String COOKIE_DOMAIN = ".zwtzmall.cn";
     private final static String COOKIE_NAME = "zmall_login_token";
 
     /**
-     * 读取LoginToekn的Cookie
+     * 读取LoginToekn Cookie的value值
      *
      * @param request
      * @return

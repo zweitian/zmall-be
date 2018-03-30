@@ -151,7 +151,7 @@ public class JsonUtil {
         String userListStr = JsonUtil.objToStringPretty(userList);
         log.info("==================");
         log.info(userListStr);
-        List<User> userListObj1 = JsonUtil.stringToObj(userListStr, new TypeReference<List<User>>() {
+        List<User> users = JsonUtil.stringToObj(userListStr, new TypeReference<List<User>>() {
         });
         List<User> userListObj2 = JsonUtil.stringToObj(userListStr, List.class, User.class);
         System.out.println("end");
