@@ -38,11 +38,11 @@ public class UserController {
         ServerResponse<User> response = iUserService.login(username, password);
         // 登录成功,存放用户信息到session域
         if (response.isSuccess()) {
-            // session.setAttribute(Const.CURRENT_USER, response.getData());
-            String sessionId = session.getId();
+            session.setAttribute(Const.CURRENT_USER, response.getData());
+            /*String sessionId = session.getId();
             String userJson = JsonUtil.objToString(response.getData());
             RedisPoolUtil.setEx(sessionId, userJson, Const.RedisCacheExtime.REDIS_SESSION_EXTIME);
-            CookieUtil.writeLoginToken(httpResponse, sessionId);
+            CookieUtil.writeLoginToken(httpResponse, sessionId);*/
         }
         return response;
     }
@@ -70,11 +70,11 @@ public class UserController {
      */
     @RequestMapping(value = "/session/user", method = RequestMethod.GET)
     @ResponseBody
-    public ServerResponse<User> getUserInfoFromSession(HttpServletRequest request) {
-        //User user = (User) session.getAttribute(Const.CURRENT_USER);
-        String sessionId = CookieUtil.readLoginToken(request);
+    public ServerResponse<User> getUserInfoFromSession(HttpServletRequest request,HttpSession session) {
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+       /* String sessionId = CookieUtil.readLoginToken(request);
         String userJsonStr = RedisPoolUtil.get(sessionId);
-        User user = JsonUtil.stringToObj(userJsonStr, User.class);
+        User user = JsonUtil.stringToObj(userJsonStr, User.class);*/
         if (user == null) {
             return ServerResponse.createByErrorMessage("用户未登录,获取用户信息失败");
         }

@@ -2,13 +2,14 @@ package com.zmall.pojo;
 
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.Date;
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class User {
+public class User implements Serializable{
     private Integer id;
 
     private String username;
