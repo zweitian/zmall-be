@@ -19,7 +19,7 @@ public class RedisPoolUtil {
      * @return
      */
     public static Long expire(String key, int exTime) {
-        Jedis jedis = null;
+        Jedis jedis = RedisPool.getJedis();
         Long result = null;
         try {
             jedis = RedisPool.getJedis();
@@ -40,7 +40,7 @@ public class RedisPoolUtil {
      * @return
      */
     public static String setEx(String key, String value, int exTime) {
-        Jedis jedis = null;
+        Jedis jedis = RedisPool.getJedis();
         String result = null;
         try {
             jedis = RedisPool.getJedis();
@@ -55,13 +55,14 @@ public class RedisPoolUtil {
     }
 
     /**
-     *  存储key,value
+     * 存储key,value
+     *
      * @param key
      * @param value
      * @return
      */
     public static String set(String key, String value) {
-        Jedis jedis = null;
+        Jedis jedis = RedisPool.getJedis();
         String result = null;
         try {
             jedis = RedisPool.getJedis();
@@ -77,11 +78,12 @@ public class RedisPoolUtil {
 
     /**
      * 根据key获取value
+     *
      * @param key
      * @return
      */
     public static String get(String key) {
-        Jedis jedis = null;
+        Jedis jedis = RedisPool.getJedis();
         String result = null;
         try {
             jedis = RedisPool.getJedis();
@@ -97,16 +99,57 @@ public class RedisPoolUtil {
 
     /**
      * 根据key删除数据
+     *
      * @param key
      * @return
      */
     public static Long del(String key) {
-        Jedis jedis = null;
+        Jedis jedis = RedisPool.getJedis();
         Long result = null;
         try {
             result = jedis.del(key);
         } catch (Exception e) {
             log.error("del key:{} error", key, e);
+            RedisPool.returnBrokenResource(jedis);
+            return result;
+        }
+        RedisPool.returnResource(jedis);
+        return result;
+    }
+
+    /**
+     * key不存在，设置key、value
+     *
+     * @param key
+     * @return 设置key、value,若key不存在设置成功返回1，否则返回0
+     */
+    public static Long setnx(String key, String value) {
+        Jedis jedis = RedisPool.getJedis();
+        Long result = null;
+        try {
+            result = jedis.setnx(key, value);
+        } catch (Exception e) {
+            log.error("setnx error key:{} value:{}", key, e);
+            RedisPool.returnBrokenResource(jedis);
+            return result;
+        }
+        RedisPool.returnResource(jedis);
+        return result;
+    }
+
+    /**
+     * 设置新的key、value，返回旧的value
+     * @param key
+     * @return 旧的value值，若key不存在返回null
+     */
+    public static String getset(String key, String value) {
+        Jedis jedis = RedisPool.getJedis();
+        ;
+        String result = null;
+        try {
+            result = jedis.getSet(key, value);
+        } catch (Exception e) {
+            log.error("getset error  key:{}  value:{}", key, value, e);
             RedisPool.returnBrokenResource(jedis);
             return result;
         }
