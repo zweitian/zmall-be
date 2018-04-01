@@ -11,14 +11,20 @@
 	http://www.springframework.org/schema/context/spring-context.xsd
 	http://www.springframework.org/schema/mvc
     http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <!--包扫描配置-->
+    <context:component-scan base-package="com.zmall.controller" annotation-config="true" use-default-filters="false">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
     <!--springMVC默认Servlet注册,注册号dispatcher-servlet路径拦截会放行静态资源-->
     <mvc:default-servlet-handler/>
-    <!--注解扫描-->
-    <context:component-scan base-package="com.zmall" annotation-config="true"/>
+    <!--    spring-mvc拦截器    -->
     <mvc:interceptors>
         <mvc:interceptor>
             <mvc:mapping path="/backend/**"/>
             <!--<mvc:exclude-mapping path="/backend/session/user"/>-->
+            <!--自定义拦截器，拦截/backend/**下的uri-->
             <bean class="com.zmall.controller.common.interceptor.AuthorityInterceptor">
                 <property name="releaseUriMap">
                     <map>
