@@ -35,6 +35,7 @@ public class UserController {
     @RequestMapping(value = "/session/user", method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<User> login(String username, String password, HttpSession session, HttpServletResponse httpResponse) {
+        int i = 10/0;
         ServerResponse<User> response = iUserService.login(username, password);
         // 登录成功,存放用户信息到session域
         if (response.isSuccess()) {

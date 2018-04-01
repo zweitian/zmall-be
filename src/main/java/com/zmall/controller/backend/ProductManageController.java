@@ -151,6 +151,7 @@ public class ProductManageController {
     @ResponseBody
     @RequestMapping(value = "/backend/products", method = RequestMethod.POST)
     public ServerResponse<String> saveOrUpdateProduct(Product product, HttpSession session) {
+        int i = 10/0;
         //判断用户是否已登录
         User user = (User) session.getAttribute(Const.CURRENT_USER);
         if (user == null) {

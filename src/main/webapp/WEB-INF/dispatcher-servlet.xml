@@ -15,7 +15,19 @@
     <mvc:default-servlet-handler/>
     <!--注解扫描-->
     <context:component-scan base-package="com.zmall" annotation-config="true"/>
-
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/backend/**"/>
+            <!--<mvc:exclude-mapping path="/backend/session/user"/>-->
+            <bean class="com.zmall.controller.common.interceptor.AuthorityInterceptor">
+                <property name="releaseUriMap">
+                    <map>
+                        <entry key="/backend/session/user" value="POST"></entry>
+                    </map>
+                </property>
+            </bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
     <!--SpringMvc的DispatcherServlet把请求分发到有@Controller注解的控制器的注解-->
     <mvc:annotation-driven>
         <!--配置Http请求为utf-8编码-->
